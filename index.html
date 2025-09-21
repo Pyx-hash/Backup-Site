@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crumb & Co - Online Food Ordering System</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Header/Navigation -->
+    <header>
+        <div class="container">
+            <h1 class="logo" style="color: black">Crumb & 
+                <span>Co</span>
+            </h1>
+            <nav>
+                <ul>
+                    <li><a href="#home" class="nav-link" data-section="menu">Menu</a></li>
+                    <li><a href="#cart" class="nav-link" data-section="cart">Cart (<span id="cart-count">0</span>)</a></li>
+                    <li><a href="#admin" class="nav-link" data-section="admin-login">Admin</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main>
+        <!-- Menu Section (Visible by default) -->
+        <section id="menu" class="section active">
+            <div class="container">
+                <div class="search-filter">
+                    <input type="text" id="search-input" placeholder="Search food items...">
+                    <select id="category-filter">
+                        <option value="all">All Categories</option>
+                        <option value="appetizer">Appetizers</option>
+                        <option value="main">Main Courses</option>
+                        <option value="dessert">Desserts</option>
+                        <option value="beverage">Beverages</option>
+                    </select>
+                    <select id="price-filter">
+                        <option value="all">All Prices</option>
+                        <option value="low">Under $10</option>
+                        <option value="medium">$10 - $20</option>
+                        <option value="high">Over $20</option>
+                    </select>
+                </div>
+                
+                <div class="food-grid" id="food-grid">
+                    <!-- Food items will be populated by JavaScript -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Cart Section -->
+        <section id="cart" class="section">
+            <div class="container">
+                <h2>Your Order</h2>
+                <div id="cart-items">
+                    <!-- Cart items will be populated by JavaScript -->
+                </div>
+                <div class="cart-total">
+                    <p>Total: $<span id="cart-total">0.00</span></p>
+                    <button id="checkout-btn">Proceed to Checkout</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Checkout Section -->
+        <section id="checkout" class="section">
+            <div class="container">
+                <h2>Checkout</h2>
+                <form id="checkout-form">
+                    <div class="form-group">
+                        <label for="name">Full Name *</label>
+                        <input type="text" id="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email *</label>
+                        <input type="email" id="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">Phone *</label>
+                        <input type="tel" id="phone" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="address">Delivery Address *</label>
+                        <textarea id="address" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="delivery-option">Delivery Option</label>
+                        <select id="delivery-option">
+                            <option value="pickup">Pickup</option>
+                            <option value="delivery">Delivery (+$5 fee)</option>
+                        </select>
+                    </div>
+                    <div class="form-buttons">
+                        <button type="button" id="back-to-cart">Back to Cart</button>
+                        <button type="submit">Place Order</button>
+                    </div>
+                </form>
+            </div>
+        </section>
+
+        <!-- Order Confirmation Section -->
+        <section id="confirmation" class="section">
+            <div class="container">
+                <div class="confirmation-card">
+                    <h2>Order Confirmed!</h2>
+                    <div id="order-details">
+                        <!-- Order details will be populated by JavaScript -->
+                    </div>
+                    <div class="confirmation-buttons">
+                        <button id="print-receipt">Print Receipt</button>
+                        <button id="new-order">Place New Order</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Admin Login Section -->
+        <section id="admin-login" class="section">
+            <div class="container">
+                <div class="login-form">
+                    <h2>Admin Login</h2>
+                    <form id="admin-login-form">
+                        <div class="form-group">
+                            <label for="admin-username">Username</label>
+                            <input type="text" id="admin-username" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="admin-password">Password</label>
+                            <input type="password" id="admin-password" required>
+                        </div>
+                        <button type="submit">Login</button>
+                    </form>
+                    <!-- 
+                        ADMIN CREDENTIALS (for demo purposes):
+                        Username: admin
+                        Password: password123
+                        
+                        To change these, edit the adminLogin() function in script.js
+                    -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Admin Dashboard Section -->
+        <section id="admin-dashboard" class="section">
+            <div class="container">
+                <div class="admin-header">
+                    <h2>Admin Dashboard</h2>
+                    <button id="admin-logout">Logout</button>
+                </div>
+                
+                <div class="admin-controls">
+                    <div class="admin-search">
+                        <input type="text" id="admin-search" placeholder="Search orders...">
+                        <select id="status-filter">
+                            <option value="all">All Status</option>
+                            <option value="pending">Pending</option>
+                            <option value="confirmed">Confirmed</option>
+                            <option value="completed">Completed</option>
+                            <option value="cancelled">Cancelled</option>
+                        </select>
+                        <input type="date" id="date-filter">
+                    </div>
+                    <div class="admin-actions">
+                        <button id="export-orders">Export to CSV</button>
+                        <button id="add-order-btn">Add New Order</button>
+                    </div>
+                </div>
+                
+                <div class="orders-table-container">
+                    <table id="orders-table">
+                        <thead>
+                            <tr>
+                                <th>Order ID</th>
+                                <th>Customer</th>
+                                <th>Items</th>
+                                <th>Total</th>
+                                <th>Status</th>
+                                <th>Date</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="orders-body">
+                            <!-- Orders will be populated by JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- Add Order Modal (for admin) -->
+        <div id="add-order-modal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <h2>Add New Order</h2>
+                <form id="add-order-form">
+                    <div class="form-group">
+                        <label for="customer-name">Customer Name *</label>
+                        <input type="text" id="customer-name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="customer-email">Email *</label>
+                        <input type="email" id="customer-email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="customer-phone">Phone *</label>
+                        <input type="tel" id="customer-phone" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="customer-address">Address</label>
+                        <textarea id="customer-address"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Select Items</label>
+                        <div id="admin-items-selection">
+                            <!-- Items will be populated by JavaScript -->
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="admin-order-status">Status</label>
+                        <select id="admin-order-status">
+                            <option value="pending">Pending</option>
+                            <option value="confirmed">Confirmed</option>
+                            <option value="completed">Completed</option>
+                            <option value="cancelled">Cancelled</option>
+                        </select>
+                    </div>
+                    <div class="form-buttons">
+                        <button type="button" class="cancel-btn">Cancel</button>
+                        <button type="submit">Add Order</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <!-- Hidden iframe for printing -->
+    <iframe id="print-frame" style="display: none;"></iframe>
+
+    <script src="app.js"></script>
+</body>
+</html>
